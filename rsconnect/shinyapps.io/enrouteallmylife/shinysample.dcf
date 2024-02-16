@@ -1,0 +1,10 @@
+name: shinysample
+title:
+username: enrouteallmylife
+account: enrouteallmylife
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 11248018
+bundleId: 8263730
+url: https://enrouteallmylife.shinyapps.io/shinysample/
+version: 1
