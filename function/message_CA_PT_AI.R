@@ -1,31 +1,56 @@
 message_CA_PT_AI = function(PI,LL, SSstanding, SSsitting,Beta,FA){
   Delta_SS = SSstanding - SSsitting
   
-  msgs = c()
+  #msgs1 = c()
+  msgs2 = c()
   
   if (PI - LL <= 10 & Delta_SS >= 30){
     CAmin = 25
     CAmax = 35
+    msgs1 = "Normal spine and hypermobile pelvis"
+    msgs2 = "Suggestions：Anteversion = 12°～20°, Inclination = 35°～40°, Combined Anteversion = 25°～35°"
   }
   
   if (PI - LL <= 10  & Delta_SS >10 & Delta_SS < 30){
     CAmin = 25
     CAmax = 45
+    msgs1 = "Normal spine and normal pelvic mobility"
+    msgs2 = "Suggestions：Anteversion = 15°～25°, Inclination = 40°～45°, Combined Anteversion = 25°～45°"
   }
   
   if (PI - LL <= 10 & Delta_SS <= 10){
     CAmin = 35
     CAmax = 45  
+    msgs1 = "Normal spine and stiff pelvis\n"
+    msgs2 = "Suggestions：Anteversion = 25°～30°, Inclination = 45°, Combined Anteversion = 35°～45°"
+    
   }
   
   if (PI - LL > 10 & Delta_SS > 10){
     CAmin = 25
     CAmax = 35  
+    msgs1 = "Flat back and normal pelvic mobility"
+    if (SSstanding > 30){
+      msgs2 = "Suggestions：Anteversion = 20°～25°, Inclination = 40°～45°, Combined Anteversion = 25°～35°"
+    }
+    if (SSstanding <= 30 & SSstanding > 13){
+      msgs2 = "Suggestions：Anteversion = 20°～25°, Inclination = 40°, Combined Anteversion = 25°～35°"
+    }
+    else{
+      msgs2 = "Refer to functional plane, suggestions：Anteversion = 25°～35°, Inclination = 45°, Combined Anteversion = 25°～35°"
+    }
   }
   
   if(PI - LL > 10 & Delta_SS <= 10){
     CAmin = 25
     CAmax = 35 
+    msgs1 = "Flat back and stiff pelvis"
+    if (SSstanding > 13){
+      msgs2 = "Suggestions：Anteversion = 25°, Inclination = 40°, Combined Anteversion = 25°～35°"
+    }
+    else{
+      msgs2 = "Refer to functional plane, suggestions：Anteversion = 25°～35°, Inclination = 45°, Combined Anteversion = 25°～35°"
+    }
   }
   
   SSi = PI * 2/3 + 5
@@ -57,9 +82,12 @@ message_CA_PT_AI = function(PI,LL, SSstanding, SSsitting,Beta,FA){
   AI = AI - Beta
   CAmin = CAmin - FA
   CAmax = CAmax - FA
-  
-  return(data.frame(Variables = c("CAmin","CAmax","PT","AI"),
-                Values = c(CAmin,CAmax, PT, AI)))
+  #print(msgs)
+  return(list(data.frame(Variables = c("CAmin","CAmax","PT","AI"),
+                Values = c(CAmin,CAmax, PT, AI)),
+              msgs1,
+              msgs2))
 }
 #df_result = message_CA_PT_AI(PI = 46,LL =20, SSstanding = 50, SSsitting = 45 ,Beta = 10 ,FA=5)
 #df_result[which(df_result$Variables =='AI'),2]
+#message_CA_PT_AI(PI = 46,LL = 40, SSstanding = 50, SSsitting = 45 ,Beta = 10 ,FA=5)
