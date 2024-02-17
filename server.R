@@ -6,6 +6,7 @@ library(tidyverse)
 library(shiny)
 library(plotly)
 
+
 #source("./function/calculate_AI.R")
 #source("./function/Bruteforce_RI_RA.R")
 
@@ -45,38 +46,48 @@ function(input, output) {
   })
   
   # Render plot output
-  output$plot <- renderPlotly({
-    # Check if bruteforceResults is NULL or not available
+  # Calculate Intersection Safe Zone as a reactive expression
+  intersectionSafeZone <- reactive({
     req(bruteforceResults())
+    df_result <- bruteforceResults()
+    
+    x_fsz <- df_result$x
+    y_fsz <- df_result$y
+    x_asz <- rep(30:45, each = 21)
+    y_asz <- rep(5:25, times = 16)
+    
+    # Filter for intersection
+    x_isz <- x_fsz[x_fsz %in% x_asz & y_fsz %in% y_asz]
+    y_isz <- y_fsz[x_fsz %in% x_asz & y_fsz %in% y_asz]
+    
+    list(x = x_isz, y = y_isz)
+  })
+  
+  # Render the main plot with refined code
+  output$plot <- renderPlotly({
+    req(bruteforceResults(), processedInputs(), intersectionSafeZone())
     CAmin <- processedInputs()$CAmin
     CAmax <- processedInputs()$CAmax
-    df_result3 <- bruteforceResults()  # This will be re-executed only if inputs change
-    # Generate the plot with plot_ly
-    plot_ly(
-      data = df_result3,
-      x = ~x, y = ~y,
-      type = "scatter",
-      mode = "markers",
-      alpha = 0.8,
-      size = 1.8
-    ) |>
-      add_markers(x = rep(30:45, each = 21), y = square_y <- rep(5:25, times = 16), 
-                  color = I("#F5CF36"),alpha = 0.8,
-                  size = 1.8)|>
-      add_segments(x = 29.5, xend = 45.5, y = CAmax + 0.5, yend = CAmax + 0.5, 
-                   line = list(color = "black", dash = "dash", width = 1.5)) |>
-      add_segments(x = 29.5, xend = 45.5, y = CAmin - 0.5, yend = CAmin - 0.5, 
-                   line = list(color = "black", dash = "dash", width = 1.5)) |>
-      add_segments(x = 29.5, xend = 29.5, y = CAmin - 0.5, yend = CAmax + 0.5,
-                   line = list(color = "black", dash = "dash", width = 1.5)) |>
-      add_segments(x = 45.5, xend = 45.5, y = CAmin - 0.5, yend = CAmax + 0.5, 
-                   line = list(color = "black", dash = "dash", width = 1)) |>
+    df_result <- bruteforceResults()
+    isz <- intersectionSafeZone()  # Use the pre-computed intersection safe zone
     
-      layout(
-        xaxis = list(title = "Inclination (°)", range = c(20, 55), showgrid = FALSE),
-        yaxis = list(title = "Anteversion (°)", range = c(0, 40), showgrid = FALSE)
-      )
-   
+    plot_ly() %>%
+      add_markers(x = df_result$x, y = df_result$y, color = I("#26547C"), size = 1.8, name = "Functional Safe Zone") %>%
+      add_markers(x = rep(30:45, each = 21), y = rep(5:25, times = 16), color = I("#FFD166"), size = 1.8, name = "Anatomical Safe Zone") %>%
+      add_markers(x = isz$x, y = isz$y, color = I("#EF476F"), size = 1.8, name = "Intersection Safe Zone") %>%
+      add_segments(x = c(29.5, 29.5, 29.5, 45.5), xend = c(45.5, 45.5, 29.5, 45.5),
+                   y = c(CAmax + 0.5, CAmin - 0.5, CAmin - 0.5, CAmin - 0.5), yend = c(CAmax + 0.5, CAmin - 0.5, CAmax + 0.5, CAmax + 0.5),
+                   line = list(color = "black", dash = "dash", width = 1.5), name = "Combined Anteversion Safe Zone") %>%
+      layout(xaxis = list(title = "Inclination (°)", range = c(20, 55), showgrid = FALSE),
+             yaxis = list(title = "Anteversion (°)", range = c(0, 40), showgrid = FALSE),
+             legend = list(orientation = "h", x = 0.3, y = -0.1))
+  })
+  # Render table output with simplified code
+  output$table <- DT::renderDataTable({
+    req(intersectionSafeZone())
+    isz <- intersectionSafeZone()  # Use the pre-computed intersection safe zone
+    
+    DT::datatable(data.frame(Inclination = isz$x, Anteversion = isz$y))
   })
   # Render text output
   output$text_message1 <- renderText({ 

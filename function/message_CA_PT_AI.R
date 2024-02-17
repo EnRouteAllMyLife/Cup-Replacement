@@ -4,14 +4,14 @@ message_CA_PT_AI = function(PI,LL, SSstanding, SSsitting,Beta,FA){
   #msgs1 = c()
   msgs2 = c()
   
-  if (PI - LL <= 10 & Delta_SS >= 30){
+  if (PI - LL <= 10 & Delta_SS > 30){
     CAmin = 25
     CAmax = 35
     msgs1 = "Normal spine and hypermobile pelvis"
     msgs2 = "Suggestions：Anteversion = 12°～20°, Inclination = 35°～40°, Combined Anteversion = 25°～35°"
   }
   
-  if (PI - LL <= 10  & Delta_SS >10 & Delta_SS < 30){
+  if (PI - LL <= 10  & Delta_SS >10 & Delta_SS <= 30){
     CAmin = 25
     CAmax = 45
     msgs1 = "Normal spine and normal pelvic mobility"
@@ -33,11 +33,11 @@ message_CA_PT_AI = function(PI,LL, SSstanding, SSsitting,Beta,FA){
     if (SSstanding > 30){
       msgs2 = "Suggestions：Anteversion = 20°～25°, Inclination = 40°～45°, Combined Anteversion = 25°～35°"
     }
-    if (SSstanding <= 30 & SSstanding > 13){
+    if (SSstanding <= 30 & SSstanding > 17){
       msgs2 = "Suggestions：Anteversion = 20°～25°, Inclination = 40°, Combined Anteversion = 25°～35°"
     }
     else{
-      msgs2 = "Refer to functional plane, suggestions：Anteversion = 25°～35°, Inclination = 45°, Combined Anteversion = 25°～35°"
+      msgs2 = "Suggestions：Anteversion = 20°, Inclination = 40°, Combined Anteversion = 25°～45°"
     }
   }
   
@@ -45,11 +45,11 @@ message_CA_PT_AI = function(PI,LL, SSstanding, SSsitting,Beta,FA){
     CAmin = 25
     CAmax = 35 
     msgs1 = "Flat back and stiff pelvis"
-    if (SSstanding > 13){
+    if (SSstanding > 17){
       msgs2 = "Suggestions：Anteversion = 25°, Inclination = 40°, Combined Anteversion = 25°～35°"
     }
     else{
-      msgs2 = "Refer to functional plane, suggestions：Anteversion = 25°～35°, Inclination = 45°, Combined Anteversion = 25°～35°"
+      msgs2 = "Suggestions：Anteversion = 25～35°, Inclination = 45°, Combined Anteversion = 35°～45°"
     }
   }
   
