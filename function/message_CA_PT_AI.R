@@ -84,7 +84,7 @@ message_CA_PT_AI = function(PI,LL, SSstanding, SSsitting,Beta,FA){
   CAmax = CAmax - FA
   #print(msgs)
   return(list(data.frame(Variables = c("CAmin","CAmax","PT","AI"),
-                Values = c(CAmin,CAmax, PT, AI)),
+              Values = c(CAmin,CAmax, PT, AI)),
               msgs1,
               msgs2))
 }
