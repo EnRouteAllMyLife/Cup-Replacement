@@ -2,40 +2,45 @@ library(shiny)
 library(plotly)
 library(tidyverse)
 library(shinythemes)
-
+#library(shinydashboard)
 fluidPage(
   theme = shinytheme("lumen"),
   titlePanel("Individualized Cup Replacement"),
-  
-  sidebarLayout(
-      sidebarPanel(
-        sliderInput(inputId ='PI', 'Pelvic Incidence (PI)', min=20, max=80,
+  a("The algorithm was designed for preoperative planning in navigation or robot assisted surgery. It could also be used for preoperative evaluation to identify at risk patients with pelvic abnormal mobility."),
+  br(),
+  br(),
+  fluidRow(
+    column(3,
+           wellPanel(
+             h4("Basic Inputs"),
+             sliderInput(inputId ='PI', 'Pelvic Incidence (PI)', min=20, max=80,
                  value = 50,step = 1, round=0),
-        sliderInput(inputId ='LL', 'Lumbar Lordosis (LL) Standing', min= 0, max=80,
+             sliderInput(inputId ='LL', 'Lumbar Lordosis (LL) Standing', min= 0, max=80,
                 value = 20,step = 1, round=0),
-        sliderInput(inputId = "SSstanding", 'Sacral Slop (SS) Standing', min= -10, max=80,
+             sliderInput(inputId = "SSstanding", 'Sacral Slop (SS) Standing', min= -10, max=80,
                 value = 50,step = 1, round=0),
-        sliderInput(inputId ='SSsitting', 'Sacral Slop (SS) Sitting', min= -10, max=80,
-                value = 20, step = 1, round=0),
-        br(),
-        br(),
-        sliderInput(inputId ='FA', 'Femoral Anteversion (FA)', min= 0, max=45,
+             sliderInput(inputId ='SSsitting', 'Sacral Slop (SS) Sitting', min= -10, max=80,
+                value = 20, step = 1, round=0)),
+           wellPanel(
+             h4("Adjusting Inputs"),
+             sliderInput(inputId ='FA', 'Femoral Anteversion (FA)', min= 0, max=45,
                 value = 0,step = 1, round=0),
-        sliderInput(inputId ='Beta', 'Anterior Pelvic Plane Inclination (Beta)', min= -30, max=30,
+             sliderInput(inputId ='Beta', 'Anterior Pelvic Plane Inclination (Beta)', min= -30, max=30,
                 value = 0,step = 1, round=0),
-        sliderInput(inputId ='d', 'Direction (right = 1, left = -1)', min=-1, max=1,
+             sliderInput(inputId ='d', 'Direction (right = 1, left = -1)', min=-1, max=1,
                 value = 1, step = 2, round=0),
-        sliderInput(inputId ='ESP', 'Epsilon', min= 1, max=5,
-                value = 3, step = 1, round=0),
+             sliderInput(inputId ='ESP', 'Epsilon', min= 1, max=5,
+                value = 3, step = 1, round=0))
      ),
   mainPanel(
-    h3("The algorithm was designed for preoperative planning in navigation or robot assisted surgery."),
-    h3("It could also be used for preoperative evaluation to identify at risk patients with pelvic abnormal mobility."),
-    tabsetPanel(
+      tabsetPanel(
       tabPanel("Plot",
-               plotlyOutput(outputId = 'plot',height = '800px'),
-               verbatimTextOutput(outputId = "text_message1"),
-               verbatimTextOutput(outputId = "text_message2")),
+              
+               wellPanel(
+                 textOutput(outputId = "text_message1"),
+                 textOutput(outputId = "text_message2")
+               ),
+               plotlyOutput(outputId = 'plot',height = '800px')),
       tabPanel("Details",
                h3("Intersection Safe Zone"),
                h4("Details on inclination, anteversion combination"),

@@ -71,17 +71,41 @@ function(input, output) {
     df_result <- bruteforceResults()
     isz <- intersectionSafeZone()  # Use the pre-computed intersection safe zone
     
-    plot_ly() %>%
-      add_markers(x = df_result$x, y = df_result$y, color = I("#26547C"), size = 1.8, name = "Functional Safe Zone") %>%
-      add_markers(x = rep(30:45, each = 21), y = rep(5:25, times = 16), color = I("#FFD166"), size = 1.8, name = "Anatomical Safe Zone") %>%
-      add_markers(x = isz$x, y = isz$y, color = I("#EF476F"), size = 1.8, name = "Intersection Safe Zone") %>%
-      add_segments(x = c(29.5, 29.5, 29.5, 45.5), xend = c(45.5, 45.5, 29.5, 45.5),
+    ## if having intercetion 
+    if (length(isz$x) > 0){
+       plot_ly() |>
+       add_markers(x = df_result$x, y = df_result$y, color = I("#26547C"), size = 1.8, name = "Functional Safe Zone",
+                   hovertemplate = paste("Functional Safe Zone<br>Inclination: %{x}<br>Anteversion: %{y}<extra></extra>")) |>
+       add_markers(x = rep(30:45, each = 21), y = rep(5:25, times = 16), color = I("#FFD166"), size = 1.8, name = "Anatomical Safe Zone",
+                   hovertemplate = paste("Anatomical Safe Zone<br>Inclination: %{x}<br>Anteversion: %{y}<extra></extra>")) |>
+       add_markers(x = isz$x, y = isz$y, color = I("#EF476F"), size = 1.8, name = "Intersection Safe Zone",
+                   hovertemplate = paste("Intersection Safe Zone<br>Inclination: %{x}<br>Anteversion: %{y}<extra></extra>")) |>
+       add_segments(x = c(29.5, 29.5, 29.5, 45.5), xend = c(45.5, 45.5, 29.5, 45.5),
                    y = c(CAmax + 0.5, CAmin - 0.5, CAmin - 0.5, CAmin - 0.5), yend = c(CAmax + 0.5, CAmin - 0.5, CAmax + 0.5, CAmax + 0.5),
-                   line = list(color = "black", dash = "dash", width = 1.5), name = "Combined Anteversion Safe Zone") %>%
+                   line = list(color = "black", dash = "dash", width = 1.5), name = "Combined Anteversion Safe Zone",
+                   hovertemplate = paste("Combined Anteversion Safe Zone<br>Inclination: %{x}<br>Anteversion: %{y}<extra></extra>")) |>
       layout(xaxis = list(title = "Inclination (°)", range = c(20, 55), showgrid = FALSE),
              yaxis = list(title = "Anteversion (°)", range = c(0, 40), showgrid = FALSE),
-             legend = list(orientation = "h", x = 0.3, y = -0.1))
+             legend = list(orientation = "v"))
+         }
+    else{
+      plot_ly() |>
+        add_markers(x = df_result$x, y = df_result$y, color = I("#26547C"), size = 1.8, name = "Functional Safe Zone",
+                    hovertemplate = paste("Functional Safe Zone<br>Inclination: %{x}<br>Anteversion: %{y}<extra></extra>")) |>
+        add_markers(x = rep(30:45, each = 21), y = rep(5:25, times = 16), color = I("#FFD166"), size = 1.8, name = "Anatomical Safe Zone",
+                    hovertemplate = paste("Anatomical Safe Zone<br>Inclination: %{x}<br>Anteversion: %{y}<extra></extra>")) |>
+        add_segments(x = c(29.5, 29.5, 29.5, 45.5), xend = c(45.5, 45.5, 29.5, 45.5),
+                     y = c(CAmax + 0.5, CAmin - 0.5, CAmin - 0.5, CAmin - 0.5), yend = c(CAmax + 0.5, CAmin - 0.5, CAmax + 0.5, CAmax + 0.5),
+                     line = list(color = "black", dash = "dash", width = 1.5), name = "Combined Anteversion Safe Zone",
+                     hovertemplate = paste("Combined Anteversion Safe Zone<br>Inclination: %{x}<br>Anteversion: %{y}<extra></extra>")) |>
+        add_text(x = 50, y= 38, text = "No Intersection Safe Zone",color = I("red"),showlegend = FALSE) |>
+        layout(xaxis = list(title = "Inclination (°)", range = c(20, 55), showgrid = FALSE),
+               yaxis = list(title = "Anteversion (°)", range = c(0, 40), showgrid = FALSE),
+               legend = list(orientation = "v"))
+      
+    } 
   })
+      
   # Render table output with simplified code
   output$table <- DT::renderDataTable({
     req(intersectionSafeZone())

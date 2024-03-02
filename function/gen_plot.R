@@ -29,8 +29,8 @@ gen_plot = function(PI,LL, SSstanding, SSsitting,
       y_isz = c(y_isz, y_fsz[i])
     } 
   }
-  
-  plot_ly() |>
+  if (length(x_isz) > 0 ){
+    plot_ly() |>
     add_markers(
       x = df_result3$x, y = df_result3$y,
       #color = ~price, text = ~text_label, 
@@ -51,12 +51,33 @@ gen_plot = function(PI,LL, SSstanding, SSsitting,
            yaxis = list(title = "Anteversion (°)", range = c(0, 40), showgrid = FALSE),
            legend = list(orientation = "h", x = 0.3, y = -0.1))
   
-   
+  }
+  else{
+    plot_ly() |>
+      add_markers(
+        x = df_result3$x, y = df_result3$y,
+        #color = ~price, text = ~text_label, 
+        color = I("#2b6a99"),size = 1.8, name = "Functional Safe Zone") |>
+      add_markers(x = rep(30:45, each = 21), y = rep(5:25, times = 16), 
+                  color = I("#f16c23"), size = 1.8,
+                  name = "Anatomical Safe Zone")|>
+      add_segments(x = c(29.5,29.5,29.5,45.5), xend = c(45.5,45.5,29.5, 45.5),
+                   y = c(CAmax + 0.5,CAmin - 0.5,CAmin - 0.5,CAmin - 0.5), 
+                   yend = c(CAmax + 0.5, CAmin - 0.5,CAmax + 0.5, CAmax + 0.5),
+                   line = list(color = "black", dash = "dash", width = 1.5), 
+                   name = "Combined Anterversion Safe Zone") |>
+      layout(xaxis = list(title = "Inclination (°)", range = c(20, 55), showgrid = FALSE),
+             yaxis = list(title = "Anteversion (°)", range = c(0, 40), showgrid = FALSE),
+             legend = list(orientation = "h", x = 0.3, y = -0.1)) |>
+      add_text(x = 50, y= 38, text = "No Intersection Safe Zone",color = I("red"),showlegend = FALSE)
+    
+  }
 }
 
 
   
-gen_plot(PI = 46,LL =20, SSstanding = 50, SSsitting = 45 ,d = 1, ESP = 3, Beta = -10 ,FA=5)
+
+gen_plot(PI = 39,LL =47, SSstanding = 27, SSsitting = 23 ,d = 1, ESP = 3, Beta = 4 ,FA=20)
 PI = 50
 LL =20
 SSstanding = 50
