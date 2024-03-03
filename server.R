@@ -7,8 +7,6 @@ library(shiny)
 library(plotly)
 
 
-#source("./function/calculate_AI.R")
-#source("./function/Bruteforce_RI_RA.R")
 
 function(input, output) {
   

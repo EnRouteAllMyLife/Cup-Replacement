@@ -5,7 +5,7 @@ account: enrouteallmylife
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 11248018
-bundleId: 8319076
+bundleId: 8321248
 url: https://enrouteallmylife.shinyapps.io/shinysample/
 version: 1
 asMultiple: FALSE
