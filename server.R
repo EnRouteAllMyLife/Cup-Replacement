@@ -84,7 +84,7 @@ function(input, output) {
                    hovertemplate = paste("Combined Anteversion Safe Zone<br>Inclination: %{x}<br>Anteversion: %{y}<extra></extra>")) |>
       layout(xaxis = list(title = "Inclination (°)", range = c(20, 55), showgrid = FALSE),
              yaxis = list(title = "Anteversion (°)", range = c(0, 40), showgrid = FALSE),
-             legend = list(orientation = "v"))
+             legend = list(orientation = "h"))
          }
     else{
       plot_ly() |>
@@ -99,7 +99,7 @@ function(input, output) {
         add_text(x = 50, y= 38, text = "No Intersection Safe Zone",color = I("red"),showlegend = FALSE) |>
         layout(xaxis = list(title = "Inclination (°)", range = c(20, 55), showgrid = FALSE),
                yaxis = list(title = "Anteversion (°)", range = c(0, 40), showgrid = FALSE),
-               legend = list(orientation = "v"))
+               legend = list(orientation = "h"))
       
     } 
   })

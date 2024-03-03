@@ -1,0 +1,12 @@
+name: IndividualizedCupReplacement
+title: IndividualizedCupReplacement
+username: enrouteallmylife
+account: enrouteallmylife
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 11385772
+bundleId: 8321281
+url: https://enrouteallmylife.shinyapps.io/IndividualizedCupReplacement/
+version: 1
+asMultiple: FALSE
+asStatic: FALSE
